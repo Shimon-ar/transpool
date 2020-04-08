@@ -3,6 +3,9 @@ package org.transpool.engine.ds;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * MapDb
+ */
 public class MapDb {
     private final int width;
     private final int length;
