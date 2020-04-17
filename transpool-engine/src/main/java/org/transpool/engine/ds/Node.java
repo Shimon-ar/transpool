@@ -6,12 +6,21 @@ import java.util.List;
 public class Node {
     private final Stop stop;
     private List<Path> paths;
-    private List<TranspoolTrip> trips;
+    private List<Integer> tripsID;
 
     public Node(Stop stop) {
         this.stop = stop;
         this.paths = new ArrayList<>();
-        this.trips = new ArrayList<>();
+        this.tripsID = new ArrayList<>();
+    }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "stop=" + stop.getName() +
+                ", paths=" + paths +
+                ", trips=" + tripsID +
+                '}';
     }
 
     public Stop getStop() {
@@ -29,14 +38,14 @@ public class Node {
         return true;
     }
 
-    public boolean addTrip(TranspoolTrip trip){
-        if(trips.contains(trip))
+    public boolean addTrip(int idTrip){
+        if(tripsID.contains(idTrip))
             return false;
-        trips.add(trip);
+        tripsID.add(idTrip);
         return true;
     }
 
-    public List<TranspoolTrip> getTrips() {
-        return trips;
+    public List<Integer> getTrips() {
+        return tripsID;
     }
 }

@@ -17,6 +17,18 @@ public class Path {
         this.speedLimit = speedLimit;
     }
 
+    @Override
+    public String toString() {
+        return "Path{" +
+                "to=" + to.getName() +
+                ", from=" + from.getName() +
+                ", one_way=" + one_way +
+                ", length=" + length +
+                ", fuelConsumption=" + fuelConsumption +
+                ", speedLimit=" + speedLimit +
+                '}';
+    }
+
     public Stop getTo() {
         return to;
     }
