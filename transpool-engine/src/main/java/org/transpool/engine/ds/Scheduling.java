@@ -1,21 +1,30 @@
 package org.transpool.engine.ds;
 
-class Scheduling {
+public class Scheduling {
 
     private Recurrences recurrences;
     private int day_start;
-    private int hour_start;
+    private Time time;
 
-    public Scheduling(String recurrences, int day_start, int hour_start) {
+    public Scheduling(String recurrences, Time time) {
         this.recurrences = Recurrences.valueOf(recurrences);
-        this.day_start = day_start;
-        this.hour_start = hour_start;
+        this.day_start = time.getDay();
+        this.time = time;
     }
 
-    public Scheduling(int hour_start) {
-        this.hour_start = hour_start;
+    @Override
+    public String toString() {
+        return "Scheduling{" +
+                "recurrences=" + recurrences +
+                ", day_start=" + day_start +
+                "," + time +
+                '}';
+    }
+
+    public Scheduling(Time time) {
+        this.time = time;
         recurrences = Recurrences.OneTime;
-        day_start = -1;
+        day_start = time.getDay();
     }
 
     public enum Recurrences {
@@ -30,7 +39,7 @@ class Scheduling {
         return day_start;
     }
 
-    public int getHour_start() {
-        return hour_start;
+    public Time getTime() {
+        return time;
     }
 }

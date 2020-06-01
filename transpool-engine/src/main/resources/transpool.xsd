@@ -50,6 +50,7 @@
 				</xs:simpleType>
 			</xs:attribute>
 			<xs:attribute name="hour-start" type="xs:int" use="required"/>
+			<xs:attribute name="minute-start" type="xs:int"/>
 			<xs:attribute name="day-start" type="xs:int"/>
 		</xs:complexType>
 	</xs:element>

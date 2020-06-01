@@ -60,22 +60,22 @@
 			<Owner>Mosh</Owner>
 			<Capacity>3</Capacity>
 			<PPK>20</PPK>
-			<Route path="A,B,E,G"/>
-			<Scheduling hour-start="10"/>
+			<Route path="C,D,B,E"/>
+			<Scheduling hour-start="10" minute-start="30" />
 		</TransPoolTrip>
 		<TransPoolTrip>
 			<Owner>Tikva</Owner>
 			<Capacity>2</Capacity>
 			<PPK>30</PPK>
-			<Route path="B,C,D,F"/>
-			<Scheduling hour-start="9"/>
+			<Route path="A,B,C,H"/>
+			<Scheduling hour-start="11" minute-start="5"/>
 		</TransPoolTrip>
 		<TransPoolTrip>
 			<Owner>Avrum</Owner>
 			<Capacity>4</Capacity>
 			<PPK>10</PPK>
-			<Route path="H,C,D,B,E,G"/>
-			<Scheduling hour-start="8"/>
+			<Route path="D,B,C,H"/>
+			<Scheduling hour-start="10" minute-start="0"/>
 		</TransPoolTrip>
 	</PlannedTrips>
 </TransPool>

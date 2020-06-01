@@ -1,0 +1,9 @@
+.tree-table-view .tree-table-cell{
+    -fx-padding: 0;
+    -fx-pref-height: 48px;
+    -fx-alignment: center;
+}
+
+.table-column {
+    -fx-alignment: center-left;
+}

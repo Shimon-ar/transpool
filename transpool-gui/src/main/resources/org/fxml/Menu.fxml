@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox fx:id="leftPopup" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.controllers.MenuController">
+   <children>
+      <JFXButton fx:id="loadMapBut" onAction="#loadMapAction" prefHeight="30.0" prefWidth="150.0" text="Load map" VBox.vgrow="NEVER">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="offerBut" onAction="#offerButAction" prefHeight="30.0" prefWidth="150.0" text="Offer trip" VBox.vgrow="NEVER">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="requestBut" onAction="#requestButAction" prefHeight="30.0" prefWidth="150.0" text="Request trip">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="matchBut" onAction="#matchButAction" prefHeight="30.0" prefWidth="150.0" text="Find match">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </JFXButton>
+   </children>
+</VBox>
