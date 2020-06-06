@@ -33,7 +33,7 @@ public class OffersTable {
 
 
         treeTableView.getColumns().addAll(idColumn,nameColumn,dayColumn,checkOutColumn,arrivalColumn,recurrencesColumn);
-        treeTableView.setPrefSize(920,250);
+        treeTableView.setPrefSize(700,150);
         idColumn.setPrefWidth(90);
         dayColumn.setPrefWidth(90);
         checkOutColumn.setPrefWidth(120);

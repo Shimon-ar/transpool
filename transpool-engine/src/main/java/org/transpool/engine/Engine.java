@@ -109,5 +109,49 @@ public class Engine {
         return requestTrips.values().stream().anyMatch(t->t.getName().equals(name));
     }
 
+    public Map<String,StopManager> getUpdateMapData(Time time){
+        Map<String,StopManager> map = new HashMap<>();
+        getStops().forEach(s -> map.put(s,new StopManager(0)));
 
-}
+   /*    getTransPoolTrips().forEach(transpoolTrip -> {
+           if(transpoolTrip.getScheduling().getRecurrences().equals(Scheduling.Recurrences.Daily)){
+
+           }
+       });*/
+
+        List<TranspoolTrip> transpoolTrips = getTransPoolTrips().stream().
+                filter(transpoolTrip -> transpoolTrip.getCheckoutTime().before(time)
+        ).collect(Collectors.toList());
+
+        transpoolTrips.stream().filter(transpoolTrip -> !transpoolTrip.getArrivalTime().before(time)).forEach(transpoolTrip -> {
+            List<String> route = transpoolTrip.getRoute();
+            boolean update = false;
+            for(int i=0;i<route.size() && !update ;i++){
+                if(transpoolTrip.whenArrivedToStop(route.get(i),getMap()).equals(time)) {
+                    updateMapStopManager(map, route.get(i), transpoolTrip.getStopsManager().get(route.get(i)));
+                    update = true;
+                }
+                if(!update && transpoolTrip.whenArrivedToStop(route.get(i),getMap()).before(time) &&
+                   !transpoolTrip.whenArrivedToStop(route.get(i+1),getMap()).before(time)) {
+                    updateMapStopManager(map, route.get(i), transpoolTrip.getStopsManager().get(route.get(i)));
+                    update = true;
+                }
+            }
+            });
+
+        transpoolTrips.stream().filter(transpoolTrip -> transpoolTrip.getArrivalTime().equals(time)).forEach(transpoolTrip -> {
+            String stopName = transpoolTrip.getRoute().get(transpoolTrip.getRoute().size() - 1);
+            updateMapStopManager(map,stopName,transpoolTrip.getStopsManager().get(stopName));
+        } );
+
+        return map;
+    }
+
+   private void updateMapStopManager(Map<String,StopManager> map,String stopName,StopManager stopManager) {
+            map.get(stopName).getUpCostumers().addAll(stopManager.getUpCostumers());
+            map.get(stopName).getDownCostumers().addAll(stopManager.getDownCostumers());
+            map.get(stopName).inc();
+        }
+   }
+
+

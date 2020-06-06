@@ -30,7 +30,7 @@ public class RequestsTable {
 
 
         treeTableView.getColumns().addAll(idColumn,nameColumn,sourceColumn,destinationColumn,dayColumn,checkArrival,timeColumn,matchedColumn);
-        treeTableView.setPrefSize(920,250);
+        treeTableView.setPrefSize(700,150);
         idColumn.setPrefWidth(70);
         dayColumn.setPrefWidth(70);
         sourceColumn.setPrefWidth(150);
@@ -46,7 +46,7 @@ public class RequestsTable {
         FxUtilities.openNewStage(treeTableView,"");
     }
 
-    public JFXTreeTableView getTreeTableView() {
+    public JFXTreeTableView<RequestTripProperty> getTreeTableView() {
         return treeTableView;
     }
 

@@ -3,7 +3,7 @@ package org.transpool.engine.ds;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StopManager {
+public class StopManager implements Cloneable {
     private List<String> upCostumers;
     private List<String> downCostumers;
     private int capacity;
@@ -42,5 +42,22 @@ public class StopManager {
 
     public int getCapacity() {
         return capacity;
+    }
+
+    @Override
+    public StopManager clone() {
+        StopManager stopManager = null;
+        try {
+            stopManager = (StopManager)super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        stopManager.upCostumers = new ArrayList<>(this.upCostumers);
+        stopManager.downCostumers = new ArrayList<>(this.downCostumers);
+        return stopManager;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 }

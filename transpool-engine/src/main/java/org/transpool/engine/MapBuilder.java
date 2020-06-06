@@ -102,10 +102,15 @@ public class MapBuilder {
                 description = "ERROR: trip of: " + trip.getOwner() + " have negative price per hour or , negative capacity";
                 return false;
             }
-
-
-
-            Time time = new Time(trip.getScheduling().getMinuteStart(), trip.getScheduling().getHourStart(), 1);
+            Time time;
+            if(trip.getScheduling().getMinuteStart() != null && trip.getScheduling().getDayStart() != null)
+                time = new Time(trip.getScheduling().getMinuteStart(), trip.getScheduling().getHourStart(), trip.getScheduling().getDayStart());
+            else if(trip.getScheduling().getDayStart() != null)
+                time = new Time(0, trip.getScheduling().getHourStart(), trip.getScheduling().getDayStart());
+            else if(trip.getScheduling().getMinuteStart() != null)
+                time = new Time(trip.getScheduling().getMinuteStart(), trip.getScheduling().getHourStart(), 1);
+            else
+                time = new Time(0, trip.getScheduling().getHourStart(), 1);
             org.transpool.engine.ds.Scheduling scheduling = new org.transpool.engine.ds.Scheduling(time);
             TranspoolTrip transpoolTrip = new TranspoolTrip(trip.getOwner().trim(), trip.getCapacity(), trip.getPPK(), stops, scheduling, map);
             allTransPoolTrips.put(transpoolTrip.getId(), transpoolTrip);
@@ -128,8 +133,9 @@ public class MapBuilder {
         if (!setPaths(transPool.getMapDescriptor().getPaths().getPath()))
             return false;
 
-        if (!setTranspoolTrips(transPool.getPlannedTrips().getTransPoolTrip()))
-            return false;
+        if (transPool.getPlannedTrips() != null)
+            if (!setTranspoolTrips(transPool.getPlannedTrips().getTransPoolTrip()))
+                return false;
 
         return true;
     }

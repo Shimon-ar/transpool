@@ -156,41 +156,5 @@
 			</Path>
 		</Paths>
 	</MapDescriptor>
-	<PlannedTrips>	
-		<TransPoolTrip>
-			<Owner>Purpule</Owner>
-			<Capacity>4</Capacity>
-			<PPK>20</PPK>
-			<Route path="Rabin Square,Azriely Mall,Lagardia,Mikve Israel,Ganot,Mesubim,Saffari"/>
-			<Scheduling hour-start="10"/>
-		</TransPoolTrip>		
-		<TransPoolTrip>
-			<Owner>Blue</Owner>
-			<Capacity>4</Capacity>
-			<PPK>50</PPK>
-			<Route path="HIT,Holon Mall,Mikve Israel,Grouping Exilse,Mesubim,Saffari,Ayallon Mall,Bursa,Square Hamedina,Independance Garden"/>
-			<Scheduling hour-start="14"/>
-		</TransPoolTrip>	
-		<TransPoolTrip>
-			<Owner>Green</Owner>
-			<Capacity>3</Capacity>
-			<PPK>10</PPK>
-			<Route path="Yoseftal,Wolfson train,MTA,Rabin Square"/>
-			<Scheduling hour-start="13"/>
-		</TransPoolTrip>	
-		<TransPoolTrip>
-			<Owner>Orange</Owner>
-			<Capacity>4</Capacity>
-			<PPK>20</PPK>
-			<Route path="HIT,Yoseftal,MTA,Lagardia,Azriely Mall, Rabin Square,Square Hamedina, Park Hayarkon"/>
-			<Scheduling hour-start="7"/>
-		</TransPoolTrip>
-		<TransPoolTrip>
-			<Owner>Red</Owner>
-			<Capacity>3</Capacity>
-			<PPK>25</PPK>
-			<Route path="Wolfson train,Yaffa Port,MTA,Lagardia,Ayallon Mall,Bursa,Square Hamedina,Park Hayarkon"/>
-			<Scheduling hour-start="8"/>
-		</TransPoolTrip>
-	</PlannedTrips>
+
 </TransPool>

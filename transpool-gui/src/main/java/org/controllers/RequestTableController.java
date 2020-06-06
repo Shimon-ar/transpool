@@ -47,4 +47,8 @@ public class RequestTableController {
         requestsTable.getTreeTableView().setShowRoot(false);
 
     }
+
+    public RequestsTable getRequestsTable() {
+        return requestsTable;
+    }
 }

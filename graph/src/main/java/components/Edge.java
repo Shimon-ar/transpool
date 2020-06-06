@@ -1,14 +1,17 @@
 package components;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 
 public class Edge extends Group {
 
     protected Cell source;
     protected Cell target;
-
     Arrow arrowLine;
-    //Line line;
 
     public Edge(Cell source, Cell target) {
 
@@ -18,23 +21,6 @@ public class Edge extends Group {
         source.addCellChild(target);
         target.addCellParent(source);
 
-        arrowLine = new Arrow(source.view.getLayoutX(),source.view.getLayoutY(),target.view.getLayoutX(),target.view.getLayoutY());
-
-         getChildren().add(arrowLine);
-
-    /*    line = new Line();
-
-        line.startXProperty().bind( source.layoutXProperty().add(source.getBoundsInParent().getWidth() / 2.0));
-        line.startYProperty().bind( source.layoutYProperty().add(source.getBoundsInParent().getHeight() / 2.0));
-
-        line.endXProperty().bind( target.layoutXProperty().add( target.getBoundsInParent().getWidth() / 2.0));
-        line.endYProperty().bind( target.layoutYProperty().add( target.getBoundsInParent().getHeight() / 2.0));
-
-        getChildren().add( line);
-        */
-
-
-
     }
 
     public Cell getSource() {
@@ -43,6 +29,34 @@ public class Edge extends Group {
 
     public Cell getTarget() {
         return target;
+    }
+
+    public void setEdge(){
+
+
+
+      arrowLine = new Arrow();
+        arrowLine.startXProperty().bind(Bindings.createDoubleBinding(() -> {
+            Bounds b = source.getBoundsInParent();
+            return (b.getMinX() + b.getWidth() / 2) - 40 ;
+        }, source.boundsInParentProperty()));
+        arrowLine.startYProperty().bind(Bindings.createDoubleBinding(() -> {
+            Bounds b = source.getBoundsInParent();
+            return (b.getMinY() + b.getHeight() / 2) ;
+        }, source.boundsInParentProperty()));
+        arrowLine.endXProperty().bind(Bindings.createDoubleBinding(() -> {
+            Bounds b = target.getBoundsInParent();
+            return (b.getMinX() + b.getWidth() / 2 ) - 40;
+        }, target.boundsInParentProperty()));
+        arrowLine.endYProperty().bind(Bindings.createDoubleBinding(() -> {
+            Bounds b = target.getBoundsInParent();
+            return (b.getMinY() + b.getHeight() / 2)   ;
+        }, target.boundsInParentProperty()));
+
+        getChildren().add(arrowLine);
+
+
+
     }
 
     public Arrow getArrowLine() {

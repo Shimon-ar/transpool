@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXProgressBar?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox fx:id="vbox" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="247.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.controllers.ProgressController">
+   <children>
+      <Label fx:id="label" alignment="CENTER" contentDisplay="TOP" prefHeight="17.0" prefWidth="200.0" text="Label">
+         <font>
+            <Font name="Times New Roman" size="14.0" />
+         </font>
+      </Label>
+      <JFXProgressBar fx:id="progressBar" prefHeight="6.0">
+         <VBox.margin>
+            <Insets bottom="6.0" left="15.0" right="15.0" top="15.0" />
+         </VBox.margin>
+      </JFXProgressBar>
+      <Label fx:id="percentLabel" prefHeight="23.0" prefWidth="28.0" text="Label">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Label>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</VBox>

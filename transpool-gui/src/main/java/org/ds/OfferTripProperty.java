@@ -44,7 +44,7 @@ public class OfferTripProperty extends RecursiveTreeObject<OfferTripProperty> {
         return offerTrip;
     }
 
-    public void onChange(Engine engine) {
+    public void updateDynamicData(Engine engine) {
         if(offerTrip.getRequestsID().size() > 0)
            requestsId.set("Passengers attached by id: " + offerTrip.getRequestsID().stream()
                    .map(String::valueOf).
@@ -60,9 +60,9 @@ public class OfferTripProperty extends RecursiveTreeObject<OfferTripProperty> {
         name = new SimpleStringProperty(offerTrip.getName());
         recurrences = new SimpleStringProperty(offerTrip.getScheduling().getRecurrences().name());
         id = new SimpleIntegerProperty(offerTrip.getId());
-        requestsId.set("No passengers attached");
+        /*requestsId.set("No passengers attached");
         capacityList.add(Integer.toString(offerTrip.getInitCapacity()));
-        timeList.add(offerTrip.getCheckoutTime() + " - " + offerTrip.getArrivalTime());
+        timeList.add(offerTrip.getCheckoutTime() + " - " + offerTrip.getArrivalTime());*/
     }
 
     private void capacityUpdate(Engine engine) {

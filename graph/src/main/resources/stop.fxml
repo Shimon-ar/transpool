@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="stackPane" maxHeight="50.0" maxWidth="120" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#stackPaneclicked" prefHeight="50.0" prefWidth="120.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.StationController">
+   <children>
+      <VBox alignment="TOP_LEFT" maxHeight="50.0" maxWidth="120.0" prefHeight="50.0" prefWidth="120.0">
+         <children>
+
+                  <ImageView fx:id="imageArea" fitHeight="30.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+
+                     <image>
+                        <Image url="Location-2-icon.png" />
+                     </image>
+                  </ImageView>
+            <HBox fx:id="carArea" maxHeight="60.0" maxWidth="120.0" prefHeight="60.0" prefWidth="120.0" />
+         </children>
+      </VBox>
+   </children>
+</StackPane>

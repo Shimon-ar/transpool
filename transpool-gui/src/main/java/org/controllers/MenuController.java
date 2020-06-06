@@ -4,10 +4,13 @@ import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import org.fxUtilities.FxUtilities;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -33,11 +36,24 @@ public class MenuController {
 
     @FXML
     private void initialize() throws IOException {
+        disableButtons(false);
 
     }
 
     @FXML
     void loadMapAction(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select xml file");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("xml files", "*.xml"));
+        File selectedFile = fileChooser.showOpenDialog(mainController.getStage());
+        if (selectedFile == null) {
+            return;
+        }
+        mainController.setPathFile(selectedFile.getAbsolutePath());
+        mainController.setIsFileSelected(true);
+
+
+
 
     }
 
@@ -80,8 +96,10 @@ public class MenuController {
 
 
 
-    public void toggleButtons(boolean bool){
-        //implemetation needed
+    public void disableButtons(boolean isMapLoaded){
+        matchBut.setDisable(!isMapLoaded);
+        offerBut.setDisable(!isMapLoaded);
+        requestBut.setDisable(!isMapLoaded);
     }
 
 }
