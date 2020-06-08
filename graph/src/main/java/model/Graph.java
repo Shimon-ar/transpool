@@ -95,7 +95,7 @@ public class Graph {
 
 
 
-    public void setEdgeAnimation(String from_to,String to_from){
+    private void setEdgeAnimation(String from_to,String to_from){
         Edge edge = edgeMap.get(from_to);
         Edge edgeRev = edgeMap.get(to_from);
 
@@ -133,11 +133,13 @@ public class Graph {
                         )
                 )
         );
-        timeline.setCycleCount(2);
+        timeline.setCycleCount(1);
         timeline.setOnFinished(event -> {
             line.getStrokeDashArray().clear();
             if(revEdge != null)
-                canvas.getChildren().add(revEdge);
+                if(!canvas.getChildren().contains(revEdge))
+                   canvas.getChildren().add(revEdge);
+
         });
 
 

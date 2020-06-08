@@ -10,6 +10,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.fxUtilities.FxUtilities;
+import org.transpool.engine.ds.Time;
 import org.validations.GenericValidation;
 import org.validations.IntegerPositiveValidation;
 
@@ -77,8 +78,9 @@ public class TripOfferController {
             validInput = false;
 
         if(validInput){
-            //send to engine parameters
-            JFXDialog dialog = new JFXDialog();
+            Time time = new Time(checkout.getValue().getMinute(),checkout.getValue().getHour(),Integer.parseInt(dayStart.getText()));
+            time.minToAdd(0);
+            mainController.addOffer(offerName.getText(),route,time,recurrence.getValue().getText(),Integer.parseInt(ppk.getText()),Integer.parseInt(capacity.getText()));
             Node source = (Node)event.getSource();
             Stage tripStage  = (Stage) source.getScene().getWindow();
             FxUtilities.showAlert(tripStage,"trip offer completed successfully",true);
@@ -91,14 +93,13 @@ public class TripOfferController {
     }
 
     public void sync(){
+        checkout.set24HourView(true);
         route = new ArrayList<>();
-        recurrence.getItems().addAll(new Label("Daily"),
-                new Label("BiDaily"),
+        recurrence.getItems().addAll(new Label("OneTime"),new Label("Daily"),
+                new Label("Bidaily"),
                 new Label("Weekly"),
                 new Label("Monthly"));
-
         List<String> stops = mainController.getStops();
-
         for(String stop:stops){
             stationPicked.getItems().add(new Label(stop));
         }

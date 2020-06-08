@@ -58,7 +58,7 @@ public class Time implements Cloneable {
             minuteS = "0" + minutes;
         else
             minuteS = Integer.toString(minutes);
-        return hourS + ":" + minuteS + " day:" + day;
+        return hourS + ":" + minuteS /*+ " day:" + day*/;
 
     }
 

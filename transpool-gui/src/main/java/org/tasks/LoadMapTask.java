@@ -23,7 +23,6 @@ public class LoadMapTask extends Task<Boolean> {
 
     private Engine engine;
     private String pathFxml;
-    private Consumer<Task> buildMap;
     private Graph graph;
     private Consumer<Boolean> onFinish;
     private MainController mainController;
@@ -31,7 +30,6 @@ public class LoadMapTask extends Task<Boolean> {
     public LoadMapTask(Engine engine, String pathFxml, Consumer<Boolean> onFinish, MainController mainController) {
         this.engine = engine;
         this.pathFxml = pathFxml;
-        this.buildMap = buildMap;
         this.onFinish = onFinish;
         this.mainController = mainController;
     }
@@ -40,13 +38,13 @@ public class LoadMapTask extends Task<Boolean> {
     protected Boolean call() {
         updateMessage("checking file validation..");
         updateProgress(0,1);
-        sleepForAWhile(5);
+        sleepForAWhile(400);
         try {
             if (!engine.loadMap(new File(pathFxml)))
                 throw new TaskException();
 
             updateMessage("start build map..");
-            sleepForAWhile(5);
+            sleepForAWhile(400);
             Platform.runLater(() -> {
                 MapDb mapDb = engine.getMap();
                 graph = new Graph(mapDb.getWidth(),mapDb.getLength());
@@ -54,33 +52,33 @@ public class LoadMapTask extends Task<Boolean> {
                 mapDb.getMap().values().forEach(node -> {
                     graph.addCell(node.getStop().getName(),node.getStop().getX(),node.getStop().getY());
                 });
-                sleepForAWhile(5);
+                sleepForAWhile(400);
                 updateMessage("build paths..");
                 mapDb.getMap().values().forEach(node -> {
                     node.getPaths().stream().forEach(path -> {
                         graph.addEdge(node.getStop().getName(),path.getTo().getName());
                     });
                 });
-                sleepForAWhile(5);
+                sleepForAWhile(400);
                 graph.connectEdges();
                 updateMessage("build table..");
+                sleepForAWhile(400);
+
                 mainController.build(graph);
 
             });
             updateMessage("done..");
+            sleepForAWhile(400);
+
             updateProgress(1, 1);
             Platform.runLater(() -> {
                 onFinish.accept(true);
             });
-        }  catch (JAXBException e) {
+        }  catch (JAXBException | IOException e) {
         e.printStackTrace();
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-        catch (TaskException e){
-        Platform.runLater(()->{
+    } catch (TaskException e){
             onFinish.accept(false);
-        });
+
     }
 
         return Boolean.TRUE;

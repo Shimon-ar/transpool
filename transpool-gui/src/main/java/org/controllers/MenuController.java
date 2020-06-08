@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -59,8 +58,7 @@ public class MenuController {
 
     @FXML
     void matchButAction(ActionEvent event) {
-
-
+        mainController.showUnMatchRequests();
     }
 
     @FXML

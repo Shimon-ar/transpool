@@ -40,6 +40,8 @@ public class RequestsTable {
         matchedColumn.setPrefWidth(90);
         nameColumn.setPrefWidth(130);
 
+        treeTableView.getStylesheets().add("/org/css/tableLignment.css");
+
     }
 
     public void show(){

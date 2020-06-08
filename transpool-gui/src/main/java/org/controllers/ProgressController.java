@@ -32,7 +32,7 @@ public class ProgressController {
         alert = new JFXAlert(stage);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setOverlayClose(false);
-        alert.setSize(500,190);
+        alert.setSize(200,190);
         JFXDialogLayout layout = new JFXDialogLayout();
         layout.setBody(vbox);
         bindToTask(task);
@@ -44,7 +44,7 @@ public class ProgressController {
     }
     public void hide(){alert.hideWithAnimation();}
 
-    public void bindToTask(Task<Boolean> task){
+     private void bindToTask(Task<Boolean> task){
         label.textProperty().bind(task.messageProperty());
         progressBar.progressProperty().bind(task.progressProperty());
         percentLabel.textProperty().bind(

@@ -10,6 +10,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.fxUtilities.FxUtilities;
+import org.transpool.engine.ds.Time;
 import org.validations.GenericValidation;
 import org.validations.IntegerPositiveValidation;
 
@@ -48,6 +49,12 @@ public class TripRequestController {
     @FXML
     private JFXButton submitBut;
 
+    @FXML
+    private JFXCheckBox comfortC;
+
+    @FXML
+    private JFXTextField flexHoursF;
+
 
     private MainController mainController;
 
@@ -83,9 +90,18 @@ public class TripRequestController {
             validInput = false;
         if(!toCombo.validate())
             validInput = false;
+        if(!flexHoursF.validate())
+            validInput = false;
+
 
         if(validInput){
-            //send to engine parameters
+            int dayStart = Integer.parseInt(dayCheckOutF.getText());
+            int hFlex = Integer.parseInt(flexHoursF.getText());
+            Time time1 = new Time(time.getValue().getMinute(),time.getValue().getHour(),dayStart);
+            time1.minToAdd(0);
+            mainController.addRequest(requestNameF.getText(),fromCombo.getValue().getText(),toCombo.getValue().getText(),
+                    time1,arrivalCheckOutB.getValue().getText(),comfortC.isSelected(),hFlex);
+
             JFXDialog dialog = new JFXDialog();
             Node source = (Node)event.getSource();
             Stage tripStage  = (Stage) source.getScene().getWindow();
@@ -102,7 +118,7 @@ public class TripRequestController {
             fromCombo.getItems().add(new Label(stop));
             toCombo.getItems().add(new Label(stop));
         }
-        arrivalCheckOutB.getItems().addAll(new Label("Arrival"),new Label("Check-out"));
+        arrivalCheckOutB.getItems().addAll(new Label("arrival"),new Label("checkout"));
 
         GenericValidation nameExistValidation = new GenericValidation("name already exist",(value)->{
             if(value.isEmpty())
@@ -128,12 +144,17 @@ public class TripRequestController {
         arrivalCheckOutB.getValidators().add(new RequiredFieldValidator("input required"));
         fromCombo.getValidators().addAll(new RequiredFieldValidator("input required"),diffStations);
         toCombo.getValidators().add(new RequiredFieldValidator("input required"));
+        flexHoursF.getValidators().addAll(new RequiredFieldValidator("input required"),new IntegerPositiveValidation("integer required"));
 
 
     }
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
+    }
+
+    private void sendData(){
+
     }
 
 

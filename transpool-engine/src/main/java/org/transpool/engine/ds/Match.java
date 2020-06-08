@@ -2,12 +2,14 @@ package org.transpool.engine.ds;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Match implements Cloneable {
     private int lastOfferId;
     private int nextOfferId;
     private String lastStop;
     private List<Integer> offerIDs;
+    private List<String> offersNames;
     private List<List<String>> routes;
     private List<RequestTime> timeForEachRoute;
     private Time startTime;
@@ -16,6 +18,7 @@ public class Match implements Cloneable {
     private int avgFoul;
 
     public Match(Integer offerId,String initStop,Time initTime) {
+        offersNames = new ArrayList<>();
         offerIDs = new ArrayList<>();
         routes = new ArrayList<>();
         List<String> route = new ArrayList<>();
@@ -121,6 +124,7 @@ public class Match implements Cloneable {
     protected Match clone() throws CloneNotSupportedException {
         Match match = (Match)super.clone();
         match.offerIDs = new ArrayList<>(this.offerIDs);
+        match.offersNames = new ArrayList<>(this.offersNames);
         match.timeForEachRoute = new ArrayList<>();
         for(RequestTime requestTime:timeForEachRoute)
             match.timeForEachRoute.add(requestTime.clone());
@@ -169,7 +173,18 @@ public class Match implements Cloneable {
         return match;
     }
 
+    public List<String> getOffersNames() {
+        return offersNames;
+    }
+
+    public void updateOffersNames(Map<Integer,TranspoolTrip> map){
+        for(int id:offerIDs)
+            offersNames.add(map.get(id).getName());
+    }
+
     public String getLastStop() {
         return lastStop;
     }
+
+
 }

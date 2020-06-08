@@ -10,6 +10,7 @@ import org.transpool.engine.ds.StopManager;
 import org.transpool.engine.ds.Time;
 import org.transpool.engine.ds.TranspoolTrip;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,19 +25,18 @@ public class OfferTripProperty extends RecursiveTreeObject<OfferTripProperty> {
     private SimpleStringProperty name;
     private SimpleStringProperty recurrences;
     private SimpleIntegerProperty id;
-    private SimpleStringProperty requestsId;
-    private ObservableList<String> timeList;
-    private ObservableList<String> capacityList;
-    private ObservableList<String> stops;
-    private ObservableList<String> upDownPassengers;
+    private String requestsId;
+    private List<String> timeList;
+    private List<String> capacityList;
+    private List<String> stops;
+    private List<String> upDownPassengers;
 
     public OfferTripProperty(TranspoolTrip offerTrip) {
         this.offerTrip = offerTrip;
-        requestsId = new SimpleStringProperty();
-        timeList = FXCollections.emptyObservableList();
-        capacityList = FXCollections.emptyObservableList();
-        stops = FXCollections.emptyObservableList();
-        upDownPassengers = FXCollections.emptyObservableList();
+        timeList = new ArrayList<>();
+        capacityList = new ArrayList<>();
+        stops = new ArrayList<>();
+        upDownPassengers = new ArrayList<>();
         initial();
     }
 
@@ -46,7 +46,7 @@ public class OfferTripProperty extends RecursiveTreeObject<OfferTripProperty> {
 
     public void updateDynamicData(Engine engine) {
         if(offerTrip.getRequestsID().size() > 0)
-           requestsId.set("Passengers attached by id: " + offerTrip.getRequestsID().stream()
+           requestsId = ("passengers attached by id: " + offerTrip.getRequestsID().stream()
                    .map(String::valueOf).
                            collect(Collectors.joining(" , ")));
         capacityUpdate(engine);
@@ -60,9 +60,9 @@ public class OfferTripProperty extends RecursiveTreeObject<OfferTripProperty> {
         name = new SimpleStringProperty(offerTrip.getName());
         recurrences = new SimpleStringProperty(offerTrip.getScheduling().getRecurrences().name());
         id = new SimpleIntegerProperty(offerTrip.getId());
-        /*requestsId.set("No passengers attached");
+        requestsId = ("no passengers attached");
         capacityList.add(Integer.toString(offerTrip.getInitCapacity()));
-        timeList.add(offerTrip.getCheckoutTime() + " - " + offerTrip.getArrivalTime());*/
+        timeList.add(offerTrip.getCheckoutTime() + " - " + offerTrip.getArrivalTime());
     }
 
     private void capacityUpdate(Engine engine) {
@@ -80,12 +80,12 @@ public class OfferTripProperty extends RecursiveTreeObject<OfferTripProperty> {
                 int currCapacity = stopManager.get(stop).getCapacity();
                 if (currCapacity != prevCapacity) {
                     Time rightTime = offerTrip.whenArrivedToStop(stop, engine.getMap());
-                    timeList.add(leftTime + " - " + rightTime);
-                    capacityList.add(Integer.toString(prevCapacity));
+                    timeList.add(leftTime + " - " + rightTime + " capacity: " + prevCapacity);
+                    //capacityList.add(Integer.toString(prevCapacity));
                     leftTime = rightTime;
                 } else if (route.size() == counter) {
-                    timeList.add(leftTime + " - " + offerTrip.getArrivalTime());
-                    capacityList.add(Integer.toString(prevCapacity));
+                    timeList.add(leftTime + " - " + offerTrip.getArrivalTime() + " capacity: " + prevCapacity);
+                  //  capacityList.add(Integer.toString(prevCapacity));
                 }
                 prevCapacity = currCapacity;
             }
@@ -104,42 +104,38 @@ public class OfferTripProperty extends RecursiveTreeObject<OfferTripProperty> {
             boolean pass = false;
             if (!stopManager.getUpCostumers().isEmpty()) {
                 pass = true;
-                upNames = "join passengers: " + String.join(" , ", stopManager.getUpCostumers());
+                upNames = "join: " + String.join(" , ", stopManager.getUpCostumers());
             }
             if (!stopManager.getDownCostumers().isEmpty()) {
                 pass = true;
-                downNames = "leave passengers: " + String.join(" , ", stopManager.getDownCostumers());
+                downNames = "leave: " + String.join(" , ", stopManager.getDownCostumers());
             }
             if(pass)
                 stops.add(stop);
             if (!upNames.isEmpty() && !downNames.isEmpty())
-                upDownPassengers.add(upNames + downNames);
+                upDownPassengers.add(stop + ": " + upNames + " , " + downNames);
             else if (!upNames.isEmpty())
-                upDownPassengers.add(upNames);
+                upDownPassengers.add(stop + ": " + upNames);
             else if (!downNames.isEmpty())
-                upDownPassengers.add(downNames);
+                upDownPassengers.add(stop + ": " + downNames);
         }
 
     }
 
 
-    public SimpleStringProperty requestsIdProperty() {
-        return requestsId;
-    }
-
-    public ObservableList<String> getTimeList() {
+    public List<String> getTimeList() {
         return timeList;
     }
 
-    public ObservableList<String> getCapacityList() {
+    public List<String> getCapacityList() {
         return capacityList;
     }
 
-    public ObservableList<String> getStops() {
+    public List<String> getStops() {
         return stops;
     }
 
-    public ObservableList<String> getUpDownPassengers() {
+    public List<String> getUpDownPassengers() {
         return upDownPassengers;
     }
 
@@ -192,6 +188,6 @@ public class OfferTripProperty extends RecursiveTreeObject<OfferTripProperty> {
     }
 
     public String getRequestsId() {
-        return requestsId.get();
+        return requestsId;
     }
 }

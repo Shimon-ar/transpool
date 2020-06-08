@@ -77,6 +77,8 @@ public class Matcher {
 
     public List<Match> getOptionalMatches(int limit) throws CloneNotSupportedException {
         makeOptionalMatches();
+        for(Match match:optionalMatches)
+            match.updateOffersNames(transPoolTrips);
         updateCostAvgEachMatch();
         if (!requestTrip.isComfortable())
             setSnobMatches(limit);

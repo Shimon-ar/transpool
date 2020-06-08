@@ -38,10 +38,10 @@ public class Engine {
         return true;
     }
 
-    public RequestTrip inRequest(String name, String from, String to, int day, int hour, int minutes, String whichTime, boolean comfortable, int hourFlex) {
-        Time time = new Time(minutes, hour, day);
+    public RequestTrip inRequest(String name, String from, String to, Time time, String whichTime, boolean comfortable, int hourFlex) {
         RequestTrip requestTrip = new RequestTrip(name, to, from, time, whichTime, comfortable, hourFlex);
-        return requestTrips.put(requestTrip.getId(), requestTrip);
+        requestTrips.put(requestTrip.getId(), requestTrip);
+        return requestTrip;
     }
 
     public List<Match> getMatches(RequestTrip requestTrip, int limit) {
@@ -85,8 +85,8 @@ public class Engine {
     }
 
 
-    public TranspoolTrip addTransPoolTrip(String name, List<String> route, int dayStart, int minutes, int hours, String recurrences, int ppk, int capacity) {
-        Scheduling scheduling = new Scheduling(recurrences,new Time(minutes, hours,dayStart));
+    public TranspoolTrip addTransPoolTrip(String name, List<String> route, Time time, String recurrences, int ppk, int capacity) {
+        Scheduling scheduling = new Scheduling(recurrences,time);
         TranspoolTrip transpoolTrip = new TranspoolTrip(name, capacity, ppk, route, scheduling, map);
         transPoolTrips.put(transpoolTrip.getId(), transpoolTrip);
         TripDetails.updateTripForEachStop(route,transpoolTrip.getId(),map);

@@ -84,8 +84,6 @@ public class TranspoolTrip {
     }
 
     public List<Integer> getRequestsID() {
-        if (requestsID.isEmpty())
-            return null;
         return requestsID;
     }
 

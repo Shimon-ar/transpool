@@ -12,6 +12,8 @@ import model.Graph;
 import org.transpool.engine.Engine;
 import org.transpool.engine.ds.Time;
 
+import java.util.List;
+
 public class LiveMapController {
 
     @FXML
@@ -135,5 +137,9 @@ public class LiveMapController {
 
     public AnchorPane getAnchorPane() {
         return anchorPane;
+    }
+
+    public void makeAnimation(List<String> route){
+        map.playAnimation(route);
     }
 }

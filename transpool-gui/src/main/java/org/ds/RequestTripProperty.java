@@ -114,6 +114,8 @@ public class RequestTripProperty extends RecursiveTreeObject<RequestTripProperty
     public SimpleStringProperty matchedProperty() {
         return matched;
     }
+
+
 }
 
 
