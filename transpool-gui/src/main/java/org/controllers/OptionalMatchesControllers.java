@@ -5,11 +5,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import jdk.nashorn.internal.ir.RuntimeNode;
 import org.ds.RequestTripProperty;
 import org.fxUtilities.FxUtilities;
-import org.guiMain.Main;
 import org.transpool.engine.ds.Match;
 import org.transpool.engine.ds.RequestTime;
 
@@ -21,19 +20,29 @@ import java.util.Map;
 public class OptionalMatchesControllers {
 
     @FXML
+    private AnchorPane anchorPane;
     private JFXListView<Label> list;
     private Map<Label, Match> map;
     private MainController mainController;
     private RequestTripProperty requestTripProperty;
 
     public void init(List<Match> matches,MainController mainController,RequestTripProperty requestTripProperty){
+        list = new JFXListView<>();
         this.mainController = mainController;
         this.requestTripProperty = requestTripProperty;
         list.depthProperty().set(1);
         list.setExpanded(true);
+
+        anchorPane.getChildren().add(list);
+        list.prefHeightProperty().bind(anchorPane.heightProperty());
+        list.prefWidthProperty().bind(anchorPane.widthProperty());
+        list.getStyleClass().add("mylistview");
+        list.getStylesheets().add("/org/css/listView.css");
+
         map = new HashMap<>();
         for(Match match:matches){
-            Label label = new Label(createMassage(match));
+            Label label = new Label();
+            label.setText(createMassage(match));
             map.put(label,match);
             list.getItems().add(label);
         }
@@ -47,12 +56,12 @@ public class OptionalMatchesControllers {
         if(label != null) {
             mainController.getEngine().setMatch(map.get(label));
             requestTripProperty.setIsMatched();
-            FxUtilities.showAlert(stage,"match has been set successfully",true);
+            FxUtilities.showAlert(stage,"match has been set successfully",true,"Alert",150,300);
 
 
         }
         else {
-            FxUtilities.showAlert(stage,"must choose request trip",false);
+            FxUtilities.showAlert(stage,"must choose request trip",false,"Alert",150,300);
         }
 
     }
@@ -77,9 +86,8 @@ public class OptionalMatchesControllers {
                     " day " + times.get(i).getArrivalTime().getDay() );
 
         }
-        System.out.println(offers.size() + "route");
 
-        return String.join("\n", offers);
+        return String.join(",", offers) + " , price: "+ match.getCost() + " , avg fuel: " + match.getAvgFoul();
 
     }
 

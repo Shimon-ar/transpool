@@ -28,7 +28,7 @@ public class Scheduling {
     }
 
     public enum Recurrences {
-        OneTime, Daily, Bidaily, Weekly, Monthly;
+        OneTime, Daily, BiDaily, Weekly, Monthly;
     }
 
     public Recurrences getRecurrences() {

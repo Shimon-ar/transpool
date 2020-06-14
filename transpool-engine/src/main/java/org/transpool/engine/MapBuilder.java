@@ -49,7 +49,7 @@ public class MapBuilder {
 
     private boolean setMap(int width, int length) {
         if (!MapDb.checkBoundaries(width, length)) {
-            description = "ERROR: map boundaries are not between 6 to 100";
+            description = "map boundaries are not between 6 to 100";
             return false;
         }
         map = new MapDb(width, length);
@@ -68,7 +68,7 @@ public class MapBuilder {
     private boolean setPaths(List<Path> paths) {
         for (Path path : paths) {
             if (!map.addPath(path.getTo().trim(), path.getFrom().trim(), path.isOneWay(), path.getLength(), path.getFuelConsumption(), path.getSpeedLimit())) {
-                description = "ERROR: invalid path";
+                description = "invalid path";
                 return false;
             }
         }
@@ -83,35 +83,41 @@ public class MapBuilder {
             String[] route = path.split(",");
             for (String stop : route) {
                 if (stops.contains(stop.trim())) {
-                    description = "ERROR: " + trip.getOwner() + " have route with duplicate station";
+                    description = "trip of: " + trip.getOwner() + " have route with duplicate station";
                     return false;
                 }
                 stops.add(stop.trim());
             }
             if (!TripDetails.isValidRoute(map, stops)) {
-                description = "ERROR: " + trip.getOwner() + " have invalid travel route";
+                description = "trip of: " +  trip.getOwner() + " have invalid travel route";
                 return false;
             }
             int hourStart = trip.getScheduling().getHourStart();
             if (hourStart < 0 || hourStart > 23) {
-                description = "ERROR: trip of: " + trip.getOwner() + "have invalid start hour";
+                description = "trip of: " + trip.getOwner() + "have invalid start hour";
                 return false;
             }
 
             if (trip.getCapacity() < 0 || trip.getPPK() < 0) {
-                description = "ERROR: trip of: " + trip.getOwner() + " have negative price per hour or , negative capacity";
+                description = "trip of: " + trip.getOwner() + " have negative price per hour or , negative capacity";
                 return false;
             }
             Time time;
-            if(trip.getScheduling().getMinuteStart() != null && trip.getScheduling().getDayStart() != null)
-                time = new Time(trip.getScheduling().getMinuteStart(), trip.getScheduling().getHourStart(), trip.getScheduling().getDayStart());
-            else if(trip.getScheduling().getDayStart() != null)
-                time = new Time(0, trip.getScheduling().getHourStart(), trip.getScheduling().getDayStart());
-            else if(trip.getScheduling().getMinuteStart() != null)
-                time = new Time(trip.getScheduling().getMinuteStart(), trip.getScheduling().getHourStart(), 1);
-            else
-                time = new Time(0, trip.getScheduling().getHourStart(), 1);
-            org.transpool.engine.ds.Scheduling scheduling = new org.transpool.engine.ds.Scheduling(time);
+            if(trip.getScheduling().getDayStart() == null)
+            {
+                description = "trip of: " + trip.getOwner() + " must have day start";
+                return false;
+            }
+            int day = trip.getScheduling().getDayStart();
+            if(day<1)
+            {
+                description = "trip of: " + trip.getOwner() + " day start must be positive";
+                return false;
+            }
+            if(trip.getScheduling().getMinuteStart() != null )
+                time = new Time(trip.getScheduling().getMinuteStart(), trip.getScheduling().getHourStart(), day);
+            else time = new Time(0, trip.getScheduling().getHourStart(), day);
+            org.transpool.engine.ds.Scheduling scheduling = new org.transpool.engine.ds.Scheduling(trip.getScheduling().getRecurrences(),time);
             TranspoolTrip transpoolTrip = new TranspoolTrip(trip.getOwner().trim(), trip.getCapacity(), trip.getPPK(), stops, scheduling, map);
             allTransPoolTrips.put(transpoolTrip.getId(), transpoolTrip);
             TripDetails.updateTripForEachStop(stops, transpoolTrip.getId(), map);

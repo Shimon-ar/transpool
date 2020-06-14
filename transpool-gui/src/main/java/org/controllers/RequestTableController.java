@@ -91,7 +91,10 @@ public class RequestTableController {
                     "offer/s name: " + requestTripProperty.getRequestTrip().getMatch().getOffersNames().stream().collect(Collectors.joining(",")) + "\n" +
                     "cost: " + requestTripProperty.getRequestTrip().getMatch().getCost() + "\n" +
                     "average fuel utilization: " + requestTripProperty.getRequestTrip().getMatch().getAvgFoul() + "\n" +
-                    "time: " + requestTripProperty.getRequestTrip().getMatch().getStartTime() + " - " + requestTripProperty.getRequestTrip().getMatch().getFinishTime();
+                    "time: " + requestTripProperty.getRequestTrip().getMatch().getStartTime() + " day:" +
+                    requestTripProperty.getRequestTrip().getMatch().getStartTime().getDay() +
+                    " - " + requestTripProperty.getRequestTrip().getMatch().getFinishTime() + " day:" +
+                    requestTripProperty.getRequestTrip().getMatch().getFinishTime().getDay();
         return details;
     }
 

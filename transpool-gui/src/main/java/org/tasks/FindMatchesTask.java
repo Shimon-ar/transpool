@@ -1,9 +1,7 @@
 package org.tasks;
 
 import javafx.concurrent.Task;
-import org.controllers.MainController;
 import org.ds.RequestTripProperty;
-import org.guiMain.Main;
 import org.transpool.engine.Engine;
 import org.transpool.engine.ds.Match;
 

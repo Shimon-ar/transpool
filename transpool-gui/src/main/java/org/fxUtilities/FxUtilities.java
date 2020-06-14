@@ -6,7 +6,6 @@ import com.jfoenix.controls.JFXDialogLayout;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -22,17 +21,17 @@ public class FxUtilities {
         secStage.show();
     }
 
-    public static void showAlert(Stage stage,String text,boolean closeCurrentStage){
+    public static void showAlert(Stage stage,String text,boolean closeCurrentStage,String head,int height,int width){
 
 
         JFXAlert alert = new JFXAlert(stage);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setOverlayClose(false);
-        alert.setSize(300,150);
+        alert.setSize(width,height);
         JFXDialogLayout layout = new JFXDialogLayout();
-        layout.setHeading(new Label("Alert"));
+        layout.setHeading(new Label(head));
         layout.setBody(new Label(text));
-        JFXButton closeButton = new JFXButton("ACCEPT");
+        JFXButton closeButton = new JFXButton("Got it");
         if(closeCurrentStage) {
             closeButton.setOnAction(myEvent -> {
                 alert.hideWithAnimation();
@@ -73,4 +72,8 @@ public class FxUtilities {
         alert.setContent(layout);
         alert.show();
     }
+
+
+
+
 }

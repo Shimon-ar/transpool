@@ -25,18 +25,21 @@ public class OfferTripProperty extends RecursiveTreeObject<OfferTripProperty> {
     private SimpleStringProperty name;
     private SimpleStringProperty recurrences;
     private SimpleIntegerProperty id;
-    private String requestsId;
+    private SimpleIntegerProperty capacity;
+
+
+    /*private String requestsId;
     private List<String> timeList;
     private List<String> capacityList;
     private List<String> stops;
-    private List<String> upDownPassengers;
+    private List<String> upDownPassengers;*/
 
     public OfferTripProperty(TranspoolTrip offerTrip) {
         this.offerTrip = offerTrip;
-        timeList = new ArrayList<>();
+      /*  timeList = new ArrayList<>();
         capacityList = new ArrayList<>();
         stops = new ArrayList<>();
-        upDownPassengers = new ArrayList<>();
+        upDownPassengers = new ArrayList<>();*/
         initial();
     }
 
@@ -44,28 +47,29 @@ public class OfferTripProperty extends RecursiveTreeObject<OfferTripProperty> {
         return offerTrip;
     }
 
-    public void updateDynamicData(Engine engine) {
+  /*  public void updateDynamicData(Engine engine) {
         if(offerTrip.getRequestsID().size() > 0)
            requestsId = ("passengers attached by id: " + offerTrip.getRequestsID().stream()
                    .map(String::valueOf).
                            collect(Collectors.joining(" , ")));
         capacityUpdate(engine);
         passengersUpDownUpdate();
-    }
+    }*/
 
     private void initial() {
         day = new SimpleIntegerProperty(offerTrip.getScheduling().getDay_start());
-        arrival = new SimpleStringProperty(offerTrip.getArrivalTime().toString());
-        checkout = new SimpleStringProperty(offerTrip.getCheckoutTime().toString());
+        arrival = new SimpleStringProperty(offerTrip.getInitArrival().toString());
+        checkout = new SimpleStringProperty(offerTrip.getInitCheckout().toString());
         name = new SimpleStringProperty(offerTrip.getName());
         recurrences = new SimpleStringProperty(offerTrip.getScheduling().getRecurrences().name());
         id = new SimpleIntegerProperty(offerTrip.getId());
-        requestsId = ("no passengers attached");
+        capacity = new SimpleIntegerProperty(offerTrip.getInitCapacity());
+        /*requestsId = ("no passengers attached");
         capacityList.add(Integer.toString(offerTrip.getInitCapacity()));
-        timeList.add(offerTrip.getCheckoutTime() + " - " + offerTrip.getArrivalTime());
+        timeList.add(offerTrip.getCheckoutTime() + " - " + offerTrip.getArrivalTime());*/
     }
 
-    private void capacityUpdate(Engine engine) {
+    /*private void capacityUpdate(Engine engine) {
         List<Integer> passengersID = offerTrip.getRequestsID();
         if (passengersID != null) {
             timeList.clear();
@@ -90,9 +94,9 @@ public class OfferTripProperty extends RecursiveTreeObject<OfferTripProperty> {
                 prevCapacity = currCapacity;
             }
         }
-    }
+    }*/
 
-    private void passengersUpDownUpdate() {
+    /*private void passengersUpDownUpdate() {
         List<String> route = offerTrip.getRoute();
         Map<String, StopManager> stopManagerMap = offerTrip.getStopsManager();
         upDownPassengers.clear();
@@ -119,9 +123,10 @@ public class OfferTripProperty extends RecursiveTreeObject<OfferTripProperty> {
             else if (!downNames.isEmpty())
                 upDownPassengers.add(stop + ": " + downNames);
         }
+*/
+    //}
 
-    }
-
+/*
 
     public List<String> getTimeList() {
         return timeList;
@@ -138,6 +143,7 @@ public class OfferTripProperty extends RecursiveTreeObject<OfferTripProperty> {
     public List<String> getUpDownPassengers() {
         return upDownPassengers;
     }
+*/
 
     public int getDay() {
         return day.get();
@@ -187,7 +193,12 @@ public class OfferTripProperty extends RecursiveTreeObject<OfferTripProperty> {
         return id;
     }
 
-    public String getRequestsId() {
-        return requestsId;
+    public SimpleIntegerProperty getCapacityProperty() {
+        return capacity;
     }
+
+/*
+    //public String getRequestsId() {
+        return requestsId;
+    }*/
 }

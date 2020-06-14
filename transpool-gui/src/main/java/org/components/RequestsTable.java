@@ -27,10 +27,10 @@ public class RequestsTable {
         nameColumn = new JFXTreeTableColumn("Name");
         dayColumn = new JFXTreeTableColumn("Day");
 
-
+        treeTableView.getStylesheets().add("/org/css/scrollPane.css");
 
         treeTableView.getColumns().addAll(idColumn,nameColumn,sourceColumn,destinationColumn,dayColumn,checkArrival,timeColumn,matchedColumn);
-        treeTableView.setPrefSize(700,150);
+        treeTableView.setPrefSize(700,170);
         idColumn.setPrefWidth(70);
         dayColumn.setPrefWidth(70);
         sourceColumn.setPrefWidth(150);

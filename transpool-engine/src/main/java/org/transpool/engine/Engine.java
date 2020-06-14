@@ -109,18 +109,23 @@ public class Engine {
         return requestTrips.values().stream().anyMatch(t->t.getName().equals(name));
     }
 
-    public Map<String,StopManager> getUpdateMapData(Time time){
-        Map<String,StopManager> map = new HashMap<>();
-        getStops().forEach(s -> map.put(s,new StopManager(0)));
+    public Map<String,TripsManager> getUpdateMapData(Time time) {
+        Map<String, TripsManager> map = new HashMap<>();
+        getStops().forEach(s -> map.put(s, new TripsManager()));
 
-   /*    getTransPoolTrips().forEach(transpoolTrip -> {
-           if(transpoolTrip.getScheduling().getRecurrences().equals(Scheduling.Recurrences.Daily)){
+        getTransPoolTrips().forEach(transpoolTrip -> {
+            String stop = transpoolTrip.whichStopILocated(time, this.map);
+            if (stop != null) {
+                map.get(stop).addTrip(transpoolTrip);
+            }
+        });
 
-           }
-       });*/
+        return map;
+    }
 
-        List<TranspoolTrip> transpoolTrips = getTransPoolTrips().stream().
-                filter(transpoolTrip -> transpoolTrip.getCheckoutTime().before(time)
+
+     /*   List<TranspoolTrip> transpoolTrips = getTransPoolTrips().stream().
+                filter(transpoolTrip -> transpoolTrip.getInitCheckout().before(time)
         ).collect(Collectors.toList());
 
         transpoolTrips.stream().filter(transpoolTrip -> !transpoolTrip.getArrivalTime().before(time)).forEach(transpoolTrip -> {
@@ -145,13 +150,13 @@ public class Engine {
         } );
 
         return map;
-    }
+    }*/
 
-   private void updateMapStopManager(Map<String,StopManager> map,String stopName,StopManager stopManager) {
+ /*  private void updateMapStopManager(Map<String,StopManager> map,String stopName,StopManager stopManager) {
             map.get(stopName).getUpCostumers().addAll(stopManager.getUpCostumers());
             map.get(stopName).getDownCostumers().addAll(stopManager.getDownCostumers());
             map.get(stopName).inc();
-        }
+        }*/
    }
 
 

@@ -83,7 +83,7 @@ public class TripOfferController {
             mainController.addOffer(offerName.getText(),route,time,recurrence.getValue().getText(),Integer.parseInt(ppk.getText()),Integer.parseInt(capacity.getText()));
             Node source = (Node)event.getSource();
             Stage tripStage  = (Stage) source.getScene().getWindow();
-            FxUtilities.showAlert(tripStage,"trip offer completed successfully",true);
+            FxUtilities.showAlert(tripStage,"trip offer completed successfully",true,"Alert",150,300);
         }
 
     }
@@ -96,7 +96,7 @@ public class TripOfferController {
         checkout.set24HourView(true);
         route = new ArrayList<>();
         recurrence.getItems().addAll(new Label("OneTime"),new Label("Daily"),
-                new Label("Bidaily"),
+                new Label("BiDaily"),
                 new Label("Weekly"),
                 new Label("Monthly"));
         List<String> stops = mainController.getStops();

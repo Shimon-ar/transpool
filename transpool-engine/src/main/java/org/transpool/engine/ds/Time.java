@@ -15,6 +15,10 @@ public class Time implements Cloneable {
     }
 
 
+    public void setDay(int day) {
+        this.day = day;
+    }
+
     @Override
     public Time clone() {
         try {
@@ -70,8 +74,13 @@ public class Time implements Cloneable {
             hours--;
         }
         int mod = minutes%5;
-        if(mod>2)
+        if(mod>2) {
             minutes = minutes - mod + 5;
+            if(minutes == 60) {
+                minutes = 0;
+                hours++;
+            }
+        }
         else minutes -= mod;
         if((sumMinutes/60 + hours) > 23 )
             day++;
@@ -96,6 +105,14 @@ public class Time implements Cloneable {
         if (this.getDay() == time.getDay() && this.getHours() < time.getHours())
             return true;
         if(this.getDay() == time.getDay() && this.getHours() == time.getHours() && this.getMinutes() <= time.getMinutes())
+            return true;
+        return false;
+    }
+
+    public boolean beforeWithoutDay(Time time){
+        if (this.getHours() < time.getHours())
+            return true;
+        if(this.getHours() == time.getHours() && this.getMinutes() < time.getMinutes())
             return true;
         return false;
     }

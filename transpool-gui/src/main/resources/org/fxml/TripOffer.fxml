@@ -8,14 +8,13 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-<ScrollPane fx:id="scrollPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.controllers.TripOfferController">
+<ScrollPane fx:id="scrollPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="50.0" minWidth="50.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.controllers.TripOfferController">
    <content>
-      <VBox fx:id="tripOfferVbox" alignment="TOP_CENTER" prefHeight="670.0" prefWidth="310.0" spacing="22.0">
+      <VBox fx:id="tripOfferVbox" alignment="TOP_CENTER" prefHeight="667.0" prefWidth="310.0" spacing="22.0">
          <children>
             <Label alignment="CENTER" contentDisplay="TOP" prefHeight="30.0" prefWidth="310.0" text="Trip offer" textOverrun="CLIP" underline="true">
                <font>

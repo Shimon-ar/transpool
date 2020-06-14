@@ -1,23 +1,35 @@
 package components;
 
+import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.JFXTabPane;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import org.transpool.engine.ds.StopManager;
+import org.transpool.engine.ds.Time;
+import org.transpool.engine.ds.TranspoolTrip;
+import org.transpool.engine.ds.TripsManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -26,10 +38,10 @@ public class Cell extends Pane {
     private String cellId;
     private StationController stationController;
     private int numOfCars;
-    private List<String> up;
-    private List<String> down;
+    private List<TranspoolTrip> trips;
     List<Cell> children = new ArrayList<>();
     List<Cell> parents = new ArrayList<>();
+    Time time;
     private double x,y;
 
     public double getX() {
@@ -43,8 +55,8 @@ public class Cell extends Pane {
     Node view;
 
     public Cell(String cellId,double x,double y,int corX,int corY) {
-       up = new ArrayList<>();
-       down = new ArrayList<>();
+       trips = new ArrayList<>();
+       setTime(new Time(0,0,1));
        this.cellId = cellId;
         this.x = x;
         this.y = y;
@@ -61,9 +73,13 @@ public class Cell extends Pane {
 
         Tooltip tooltip = new Tooltip(cellId + "\n" +"("+ corX + "," + corY + ")");
         hackTooltipStartTiming(tooltip);
-        Tooltip.install(stationController.getStackPane(), tooltip);
-        setDetailMessage();
+        Tooltip.install(stationController.getImageArea(), tooltip);
+        setDetails();
 
+    }
+
+    public void setTime(Time time) {
+        this.time = time;
     }
 
     public void addCellChild(Cell cell) {
@@ -101,13 +117,10 @@ public class Cell extends Pane {
         return cellId;
     }
 
-    public void setUp(List<String> up) {
-        this.up = up;
-    }
+   public void setTrips(List<TranspoolTrip> trips){
+        this.trips = trips;
+   }
 
-    public void setDown(List<String> down) {
-        this.down = down;
-    }
 
     public StationController getStationController() {
         return stationController;
@@ -134,23 +147,87 @@ public class Cell extends Pane {
     public void setCars(int num){
         this.numOfCars = num;
         stationController.getCarArea().getChildren().clear();
-        FileInputStream input = null;
         try {
-            input = new FileInputStream("/Users/shimon/Desktop/projects/transpool/graph/src/main/resources/car.jpg");
-        } catch (FileNotFoundException e) {
+            try (InputStream input = getClass().getResourceAsStream("/car.jpg")) {
+                Image image = new Image(input);
+                for (int i = 0; i < num; i++) {
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(30);
+                    imageView.setFitWidth(25);
+                    stationController.getCarArea().getChildren().add(imageView);
+                }
+            }
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-
-        Image image = new Image(input);
-       for(int i = 0;i<num;i++){
-            ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(18);
-            imageView.setFitWidth(20);
-            stationController.getCarArea().getChildren().add(imageView);
         }
     }
 
-    public void setDetailMessage(){
+    public void setDetails(){
+        stationController.setOnClick(stage -> {
+            if(trips.isEmpty()){
+                CellDetails.showAlert(stage,
+                        cellId , "\n" +
+                                "There are no trips passing through this station"
+                        , false);
+            }
+            else{
+            /*   // VBox vBox = new VBox();
+                vBox.setAlignment(Pos.TOP_CENTER);
+                vBox.setSpacing(10);
+                vBox.getChildren().add(new Label("Trips"));*/
+                JFXTabPane tabPane = new JFXTabPane();
+                for(TranspoolTrip transpoolTrip:trips){
+                    Tab tab = new Tab();
+                    tab.setText(transpoolTrip.getName());
+                    String details = "";
+                    String upNames = "";
+                    String downNames = "";
+                    StopManager stopManager = transpoolTrip.getStopsManager(time.getDay()).get(cellId);
+                        boolean pass = false;
+                    if (!stopManager.getUpCostumers().isEmpty()) {
+                        pass = true;
+                        upNames = "join: " + String.join(" , ", stopManager.getUpCostumers());
+                    }
+                    if (!stopManager.getDownCostumers().isEmpty()) {
+                        pass = true;
+                        downNames = "leave: " + String.join(" , ", stopManager.getDownCostumers());
+                    }
+                    if (!upNames.isEmpty() && !downNames.isEmpty())
+                        details = upNames + " , " + downNames;
+                    else if (!upNames.isEmpty())
+                        details = upNames;
+                    else if (!downNames.isEmpty())
+                        details = downNames;
+
+                    String attachedPassengers = "";
+                    List<Integer> requestsId = transpoolTrip.getRequestsID(time.getDay());
+                    if(!requestsId.isEmpty())
+                        attachedPassengers = "attached passengers ID's: " + requestsId.stream().map(String::valueOf)
+                            .collect(Collectors.joining(","));
+
+
+                    Label label = new Label("id: " + transpoolTrip.getId() +
+                            "\ncapacity: " + stopManager.getCapacity() +
+                            "\n" + attachedPassengers + "\n"
+                            + details);
+                   // JFXDialogLayout content = new JFXDialogLayout();
+                    //content.setBody(label);
+                    //tab.setContent(content);
+                    tab.setContent(label);
+                    tabPane.getTabs().add(tab);
+
+                }
+
+                CellDetails.showMassage(stage,"Trips",tabPane,false);
+            }
+
+
+
+
+        });
+    }
+
+    /*public void setDetailMessage(){
         stationController.setOnClick(stage -> {
             if(!up.isEmpty() && !down.isEmpty()) {
                 CellDetails.showAlert(stage,
@@ -184,7 +261,7 @@ public class Cell extends Pane {
             });
 
     }
-
+*/
 
     }
 

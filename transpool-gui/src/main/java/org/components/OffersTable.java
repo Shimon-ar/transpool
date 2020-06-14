@@ -31,9 +31,11 @@ public class OffersTable {
         dayColumn = new JFXTreeTableColumn("Day-start");
         recurrencesColumn = new JFXTreeTableColumn("Recurrences");
 
+        treeTableView.getStylesheets().add("/org/css/scrollPane.css");
+
 
         treeTableView.getColumns().addAll(idColumn,nameColumn,dayColumn,checkOutColumn,arrivalColumn,recurrencesColumn);
-        treeTableView.setPrefSize(700,150);
+        treeTableView.setPrefSize(700,170);
         idColumn.setPrefWidth(90);
         dayColumn.setPrefWidth(90);
         checkOutColumn.setPrefWidth(120);

@@ -11,6 +11,7 @@ import org.controllers.MainController;
 import org.controllers.OfferTableController;
 import org.controllers.RequestTableController;
 import org.ds.OfferTripProperty;
+import org.fxUtilities.FxUtilities;
 import org.transpool.engine.Engine;
 import org.transpool.engine.ds.MapDb;
 
@@ -38,13 +39,15 @@ public class LoadMapTask extends Task<Boolean> {
     protected Boolean call() {
         updateMessage("checking file validation..");
         updateProgress(0,1);
-        sleepForAWhile(400);
+        sleepForAWhile(300);
         try {
             if (!engine.loadMap(new File(pathFxml)))
                 throw new TaskException();
 
+            updateProgress(0.3,1);
             updateMessage("start build map..");
-            sleepForAWhile(400);
+            sleepForAWhile(300);
+            updateProgress(0.6,1);
             Platform.runLater(() -> {
                 MapDb mapDb = engine.getMap();
                 graph = new Graph(mapDb.getWidth(),mapDb.getLength());
@@ -52,17 +55,19 @@ public class LoadMapTask extends Task<Boolean> {
                 mapDb.getMap().values().forEach(node -> {
                     graph.addCell(node.getStop().getName(),node.getStop().getX(),node.getStop().getY());
                 });
-                sleepForAWhile(400);
+                updateProgress(0.8,1);
+                sleepForAWhile(300);
                 updateMessage("build paths..");
                 mapDb.getMap().values().forEach(node -> {
                     node.getPaths().stream().forEach(path -> {
                         graph.addEdge(node.getStop().getName(),path.getTo().getName());
                     });
                 });
-                sleepForAWhile(400);
+                sleepForAWhile(300);
+                updateProgress(0.9,1);
                 graph.connectEdges();
                 updateMessage("build table..");
-                sleepForAWhile(400);
+                sleepForAWhile(300);
 
                 mainController.build(graph);
 
@@ -77,7 +82,8 @@ public class LoadMapTask extends Task<Boolean> {
         }  catch (JAXBException | IOException e) {
         e.printStackTrace();
     } catch (TaskException e){
-            onFinish.accept(false);
+            Platform.runLater(()->onFinish.accept(false));
+
 
     }
 

@@ -22,25 +22,36 @@ public class Matcher {
 
     }
 
-    private void makeOptionalMatches() throws CloneNotSupportedException {
+    private void makeOptionalMatches(int day) throws CloneNotSupportedException {
         String initStop = requestTrip.getFrom();
         String destStop = requestTrip.getTo();
         List<Integer> trips = map.getMap().get(initStop).getTrips();
         Queue<Match> queue = new LinkedList<>();
         for (int offerId : trips) {
             TranspoolTrip transpoolTrip = transPoolTrips.get(offerId);
-            if (transpoolTrip.getStopsManager().get(initStop).getCapacity() > 0)
-                queue.add(new Match(offerId, initStop, transpoolTrip.whenArrivedToStop(initStop, map)));
+            if (transpoolTrip.isGoingOutAtDay(day) && transpoolTrip.getStopsManager(day).get(initStop).getCapacity() > 0 ) {
+                if(transpoolTrip.whenArrivedToStop(initStop, map, day) != null)
+                queue.add(new Match(offerId, initStop, transpoolTrip.whenArrivedToStop(initStop, map, day)));
+            }
+
         }
 
         while (!queue.isEmpty()) {
+System.out.println("loop");
             Match match = queue.remove();
             TranspoolTrip nextTrip = transPoolTrips.get(match.getNextOfferId());
             int index = nextTrip.getRoute().indexOf(match.getLastStop());
-            if (nextTrip.getRoute().size() > (++index) && nextTrip.getStopsManager().get(match.getLastStop()).getCapacity() > 0) {
+            Integer nextTripDay = nextTrip.getNextDay(match.getFinishTime().getDay());
+            Map<String, StopManager> stopManagerMap = null;
+            if(nextTripDay != null)
+            stopManagerMap = nextTrip.getStopsManager(nextTripDay);
+
+            if (nextTrip.getRoute().size() > (++index) && stopManagerMap!=null  &&
+                    stopManagerMap.get(match.getLastStop()).getCapacity() > 0) {
                 String nextStop = nextTrip.getRoute().get(index);
-                Time timeArrived = nextTrip.whenArrivedToStop(nextStop, map);
-                Time timeCheckout = nextTrip.whenArrivedToStop(match.getLastStop(), map);
+                Time timeArrived = nextTrip.whenArrivedToStop(nextStop, map,nextTripDay);
+                Time timeCheckout = nextTrip.whenArrivedToStop(match.getLastStop(), map,nextTripDay);
+
                 if (nextStop.equals(destStop)) {
                      if(match.isPossibleToAddOffer(nextStop, -1, timeCheckout)) {
                          match = match.addOffer(nextStop, -1, timeArrived, timeCheckout);
@@ -76,7 +87,7 @@ public class Matcher {
     }
 
     public List<Match> getOptionalMatches(int limit) throws CloneNotSupportedException {
-        makeOptionalMatches();
+        makeOptionalMatches(requestTrip.getRequestTime().getTime().getDay());
         for(Match match:optionalMatches)
             match.updateOffersNames(transPoolTrips);
         updateCostAvgEachMatch();
@@ -97,7 +108,10 @@ public class Matcher {
                 if (Math.abs(requestTime.getDay() - startTime.getDay()) > 1)
                     return false;
                 if (startTime.getDay() < requestTime.getDay()) {
-                    int hourCom = (startTime.getHours() + flexHours) % 24;
+                    int hour = startTime.getHours() + flexHours;
+                    if(hour<24)
+                        return false;
+                    int hourCom = (hour) % 24;
                     if (hourCom < requestTime.getHours())
                         return false;
                     else if (hourCom == requestTime.getHours())
@@ -105,7 +119,10 @@ public class Matcher {
                             return false;
                 }
                 if (requestTime.getDay() < startTime.getDay()) {
-                    int hourCom = (requestTime.getHours() + flexHours) % 24;
+                    int hour = requestTime.getHours() + flexHours;
+                    if(hour<24)
+                        return false;
+                    int hourCom = (hour) % 24;
                     if (hourCom < startTime.getHours())
                         return false;
                     else if (hourCom == startTime.getHours())
@@ -136,7 +153,10 @@ public class Matcher {
                 if (Math.abs(requestTime.getDay() - finishTime.getDay()) > 1)
                     return false;
                 if (finishTime.getDay() < requestTime.getDay()) {
-                    int hourCom = (finishTime.getHours() + flexHours) % 24;
+                    int hour = finishTime.getHours() + flexHours;
+                    if(hour<24)
+                        return false;
+                    int hourCom = (hour) % 24;
                     if (hourCom < requestTime.getHours())
                         return false;
                     else if (hourCom == requestTime.getHours())
@@ -144,7 +164,10 @@ public class Matcher {
                             return false;
                 }
                 if (requestTime.getDay() < finishTime.getDay()) {
-                    int hourCom = (requestTime.getHours() + flexHours) % 24;
+                    int hour = requestTime.getHours() + flexHours;
+                    if(hour<24)
+                        return false;
+                    int hourCom = hour % 24;
                     if (hourCom < finishTime.getHours())
                         return false;
                     else if (hourCom == finishTime.getHours())
@@ -181,6 +204,10 @@ public class Matcher {
                 return -1;
             if (m2.getOfferIDs().size() == 1)
                 return 1;
+            if(m1.getFinishTime().before(m2.getFinishTime()))
+                return -1;
+            if(m2.getFinishTime().before(m1.getFinishTime()))
+                return 1;
             if (TripDetails.howLong(map, TripDetails.appendRoutes(m1)) > TripDetails.howLong(map, TripDetails.appendRoutes(m2)))
                 return -1;
             return 1;
@@ -202,9 +229,12 @@ public class Matcher {
             return false;
         int count = 0;
         List<List<String>> routes = match.getRoutes();
-        for (List<String> route : routes)
+        for (List<String> route : routes) {
             transPoolTrips.get(match.getOfferIDs().get(count)).
-                    addRequestTrip(requestTrip.getId(), requestTrip.getName(), route.get(0), route.get(route.size() - 1));
+                    addRequestTrip(requestTrip.getId(), requestTrip.getName(), route.get(0), route.get(route.size() - 1),
+                            match.getTimeForEachRoute().get(count).getCheckoutTime().getDay());
+            count++;
+        }
         requestTrip.setMatch(match);
         return true;
     }

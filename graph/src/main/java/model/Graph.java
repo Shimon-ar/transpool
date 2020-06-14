@@ -10,6 +10,8 @@ import javafx.scene.Group;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 import org.transpool.engine.ds.StopManager;
+import org.transpool.engine.ds.Time;
+import org.transpool.engine.ds.TripsManager;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -51,8 +53,8 @@ public class Graph {
         allCells.add(cell);
         cellMap.put( cell.getCellId(), cell);
         canvas.getChildren().add(cell);
-        cell.setLayoutX(cell.getX()*1050);
-        cell.setLayoutY(cell.getY()*450);
+        cell.setLayoutX(cell.getX()*1200);
+        cell.setLayoutY(cell.getY()*700);
 
     }
 
@@ -164,12 +166,12 @@ public class Graph {
 
 
 
-    public void updateDetails(Map<String, StopManager> map){
+    public void updateDetails(Map<String, TripsManager> map, Time currentTime){
         for(String stopName:map.keySet()){
             Cell cell = cellMap.get(stopName);
-            cell.setCars(map.get(stopName).getCapacity());
-            cell.setDown(map.get(stopName).getDownCostumers());
-            cell.setUp(map.get(stopName).getUpCostumers());
+            cell.setCars(map.get(stopName).getNumOfTrips());
+            cell.setTrips(map.get(stopName).getTrips());
+            cell.setTime(currentTime.clone());
         }
     }
 }

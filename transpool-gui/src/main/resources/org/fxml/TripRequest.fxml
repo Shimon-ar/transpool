@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fx:id="scrollPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="663.0" prefWidth="343.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.controllers.TripRequestController">
+<ScrollPane fx:id="scrollPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="714.0" prefWidth="343.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.controllers.TripRequestController">
    <content>
-      <VBox fx:id="tripRequestV" alignment="TOP_CENTER" prefHeight="561.0" prefWidth="338.0" spacing="27.0">
+      <VBox fx:id="tripRequestV" alignment="TOP_CENTER" prefHeight="621.0" prefWidth="338.0" spacing="27.0">
          <children>
             <Label fx:id="tripRequestLab" text="Trip request">
                <font>
@@ -40,14 +40,14 @@
             <JFXComboBox fx:id="arrivalCheckOutB" prefHeight="30.0" prefWidth="150.0" promptText="Arrival/Check-out" />
             <JFXComboBox fx:id="fromCombo" prefHeight="30.0" prefWidth="150.0" promptText="Source station" />
             <JFXComboBox fx:id="toCombo" prefHeight="30.0" prefWidth="150.0" promptText="Destination station" />
-            <JFXCheckBox fx:id="comfortC" maxHeight="30.0" maxWidth="168.0" minHeight="30.0" prefHeight="30.0" prefWidth="168.0" text="Agree to more than one trip change">
+            <JFXCheckBox fx:id="comfortC" maxHeight="30.0" maxWidth="237.0" minHeight="30.0" prefHeight="30.0" prefWidth="237.0" text="Agree to more than one trip change">
                <font>
-                  <Font size="9.0" />
+                  <Font size="12.0" />
                </font>
             </JFXCheckBox>
-            <JFXTextField fx:id="flexHoursF" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" promptText="Number of hours you ready to flex">
+            <JFXTextField fx:id="flexHoursF" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="181.0" promptText="Number of hours you ready to flex">
                <font>
-                  <Font size="10.0" />
+                  <Font size="11.0" />
                </font>
             </JFXTextField>
             <VBox alignment="BOTTOM_CENTER" prefHeight="68.0" prefWidth="338.0">

@@ -88,6 +88,9 @@ public class Match implements Cloneable {
 
     public boolean isPossibleToAddOffer(String stop,int nextOfferId,Time timeCheckout) {
 
+        if(timeCheckout == null)
+            return false;
+
 
         for(List<String> route:routes)
             if(route.contains(stop))
@@ -96,25 +99,30 @@ public class Match implements Cloneable {
         if (offerIDs.contains(nextOfferId) && this.nextOfferId != nextOfferId)
             return false;
 
-        if (timeCheckout.getDay() < finishTime.getDay())
+        if(timeCheckout.equals(finishTime))
+            return true;
+        if(timeCheckout.before(finishTime))
             return false;
 
-        if ((timeCheckout.getDay() - finishTime.getDay()) > 1)
-            return false;
+        /*if (timeCheckout.getDay() < finishTime.getDay())
+            return false;*/
 
-        if ((timeCheckout.getDay() - finishTime.getDay()) == 1) {
+        /*if ((timeCheckout.getDay() - finishTime.getDay()) > 5)
+            return false;*/
+
+      /*  if ((timeCheckout.getDay() - finishTime.getDay()) == 1) {
             if ((finishTime.getHours() != 23 || timeCheckout.getHours() != 0))
                 return false;
             else return true;
-        }
+        }*/
 
-        int hoursCheck = timeCheckout.getHours() - finishTime.getHours();
-        if (hoursCheck < 0)
+        /*int hoursCheck = timeCheckout.getHours() - finishTime.getHours();
+        if (timeCheckout.getDay() == finishTime.getDay() && hoursCheck < 0)
             return false;
-        if (hoursCheck > 1)
-            return false;
-        if (hoursCheck == 0 && timeCheckout.getMinutes() < finishTime.getMinutes())
-            return false;
+        *//*if (hoursCheck > 1)
+            return false;*//*
+        if (timeCheckout.getDay() == finishTime.getDay() && hoursCheck == 0 && timeCheckout.getMinutes() < finishTime.getMinutes())
+            return false;*/
 
 
         return true;
@@ -130,7 +138,7 @@ public class Match implements Cloneable {
             match.timeForEachRoute.add(requestTime.clone());
         //match.timeForEachRoute = new ArrayList<>(this.timeForEachRoute);
         match.startTime = this.startTime.clone();
-        //match.finishTime = this.finishTime.clone();
+        match.finishTime = this.finishTime.clone();
         List<List<String>> matchRoutes = new ArrayList<>();
         for(List<String> route:routes)
             matchRoutes.add(new ArrayList<>(route));

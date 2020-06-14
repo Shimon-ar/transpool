@@ -105,7 +105,7 @@ public class TripRequestController {
             JFXDialog dialog = new JFXDialog();
             Node source = (Node)event.getSource();
             Stage tripStage  = (Stage) source.getScene().getWindow();
-            FxUtilities.showAlert(tripStage,"trip request completed successfully",true);
+            FxUtilities.showAlert(tripStage,"trip request completed successfully",true,"Alert",150,300);
         }
 
     }

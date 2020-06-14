@@ -11,7 +11,7 @@ public class RightPopUpController {
     private VBox rightPopUp;
 
     @FXML
-    private JFXButton styleBut;
+    private JFXButton animation;
 
     @FXML
     private JFXButton exitBut;
@@ -19,14 +19,23 @@ public class RightPopUpController {
     private MainController mainController;
 
 
+
+
     @FXML
     void exitButAction(ActionEvent event) {
-
+        mainController.exit();
     }
 
     @FXML
-    void styleButAction(ActionEvent event) {
-
+    void animationAction(ActionEvent event) {
+        if(mainController.isAnimationPlay()) {
+            mainController.setAnimationPlay(false);
+            animation.setText("animation on");
+        }
+        else {
+            mainController.setAnimationPlay(true);
+            animation.setText("animation off");
+        }
     }
 
     public void setMainController(MainController mainController) {

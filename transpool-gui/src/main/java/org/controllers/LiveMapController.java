@@ -20,6 +20,9 @@ public class LiveMapController {
     private VBox vBox;
 
     @FXML
+    private Label timeLabel;
+
+    @FXML
     private Label headLabel;
 
     @FXML
@@ -40,11 +43,7 @@ public class LiveMapController {
     private MainController mainController;
     private Graph map;
     private Time currentTime;
-   //private Engine engine;
 
-/*    public void setEngine(Engine engine) {
-        this.engine = engine;
-    }*/
 
     public void initialize(){
         combo.getItems().addAll(new Label("5 min"),
@@ -58,6 +57,14 @@ public class LiveMapController {
             nextB.setDisable(false);
             setPrevDisable();
         });
+        setTimeLabel();
+        anchorPane.getStyleClass().add("anchor");
+        anchorPane.getStylesheets().add("/org/css/anchorPane.css");
+        scrollPane.getStylesheets().add("/org/css/scrollPane.css");
+    }
+
+    private void setTimeLabel(){
+        timeLabel.setText(currentTime + "  day: " + currentTime.getDay());
     }
 
 
@@ -66,23 +73,19 @@ public class LiveMapController {
     }
 
     public void setMap(Graph map) {
-        this.map = map;
-        map.updateDetails(mainController.getUpdateMapDetail(currentTime));
-        //map.updateDetails(engine.getUpdateMapData(currentTime));
-        anchorPane.getChildren().clear();
-       //map.getCanvas().prefHeight(1000);
-        anchorPane.getChildren().add(map.getCanvas());
-       anchorPane.setPrefHeight(map.getCanvas().getBoundsInParent().getHeight()+70);
-       map.getCanvas().setAutoSizeChildren(true);
 
+        this.map = map;
+        map.updateDetails(mainController.getUpdateMapDetail(currentTime),currentTime);
+        anchorPane.getChildren().clear();
+        anchorPane.getChildren().add(map.getCanvas());
     }
 
     @FXML
     void clickNext(ActionEvent event) {
        currentTime = updateTime(true);
-        map.updateDetails(mainController.getUpdateMapDetail(currentTime));
-       // map.updateDetails(engine.getUpdateMapData(currentTime));
+        map.updateDetails(mainController.getUpdateMapDetail(currentTime),currentTime);
        setPrevDisable();
+       setTimeLabel();
     }
 
     private void setPrevDisable(){
@@ -96,9 +99,9 @@ public class LiveMapController {
     @FXML
     void clickPrev(ActionEvent event) {
         currentTime = updateTime(false);
-        map.updateDetails(mainController.getUpdateMapDetail(currentTime));
-       // map.updateDetails(engine.getUpdateMapData(currentTime));
+        map.updateDetails(mainController.getUpdateMapDetail(currentTime),currentTime);
         setPrevDisable();
+        setTimeLabel();
     }
 
     private Time updateTime(boolean next){

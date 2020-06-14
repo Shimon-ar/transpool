@@ -4,7 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
-import com.sun.deploy.net.proxy.MacOSXSystemProxyHandler;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -86,7 +86,7 @@ public class FindMatchController {
             mainController.actionOnFindMatch(mapRequest.get(selectedKey), Integer.parseInt(limitF.getText()));
         }
         else if(selectedKey.isEmpty()){
-            FxUtilities.showAlert(stage,"must choose request trip",false);
+            FxUtilities.showAlert(stage,"must choose request trip",false,"ERROR",150,300);
         }
 
     }

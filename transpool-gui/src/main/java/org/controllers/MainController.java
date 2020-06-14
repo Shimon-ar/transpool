@@ -13,11 +13,12 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.Graph;
 import org.components.Tabs;
@@ -40,8 +41,8 @@ import java.util.stream.Collectors;
 public class MainController {
 
 
-    @FXML
-    private ScrollPane mainScroll;
+   /* @FXML
+    private ScrollPane mainScroll;*/
 
     @FXML
     private BorderPane borderPane;
@@ -88,14 +89,14 @@ public class MainController {
         isMapLoaded = new SimpleBooleanProperty(false);
         animationPlay = new SimpleBooleanProperty(true);
 
-        isFileSelected.addListener((o,l,n)->{
-            if(n)
+        isFileSelected.addListener((o, l, n) -> {
+            if (n)
                 actionOnFileSelected();
         });
 
-        isMapLoaded.addListener((o,l,n)->{
-          if(n)
-              menuController.disableButtons(true);
+        isMapLoaded.addListener((o, l, n) -> {
+            if (n)
+                menuController.disableButtons(true);
         });
 
 
@@ -113,6 +114,17 @@ public class MainController {
         VBox rightMenu = loader.load();
         rightPopUp = new JFXPopup(rightMenu);
         setRightPopUpController(loader.getController());
+
+
+        Image image1 = new Image("/org/css/earthBlue.jpg");
+        BackgroundSize bSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
+
+        borderPane.setBackground(new Background(new BackgroundImage(image1,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                bSize)));
+
 
 
     }
@@ -163,7 +175,7 @@ public class MainController {
     }
 
     public Stage getStage(){
-        return (Stage)mainScroll.getScene().getWindow();
+        return (Stage)borderPane.getScene().getWindow();
     }
 
     public void setMenuController(MenuController menuController){
@@ -214,7 +226,7 @@ public class MainController {
     }
 
 
-    public Map<String, StopManager> getUpdateMapDetail(Time time){
+    public Map<String, TripsManager> getUpdateMapDetail(Time time){
         return engine.getUpdateMapData(time);
     }
 
@@ -223,7 +235,6 @@ public class MainController {
     }
 
     public void actionOnFileSelected(){
-
         FXMLLoader loader = new FXMLLoader();
 
         URL mainFXML = getClass().getResource("/org/fxml/Progress.fxml");
@@ -238,6 +249,8 @@ public class MainController {
                 isMapLoaded.set(t);
                 isFileSelected.set(false);
                 progressController.hide();
+                if(!t)
+                    FxUtilities.showAlert(getStage(),engine.getErrorDes(),false,"Alert",150,370);
         },this);
         progressController.build(getStage(),loadMapTask);
         progressController.show();
@@ -269,13 +282,28 @@ public class MainController {
         setLiveMapController(liveMapController);
         liveMapController.setMap(graph);
         Tabs tabs = new Tabs(offerTableController.getOffersTable().getTreeTableView(),requestTableController.getRequestsTable().getTreeTableView());
+        BorderPane.setAlignment(liveMap, Pos.CENTER);
+        BorderPane.setAlignment(mainToolBar,Pos.CENTER);
+        borderPane.setBackground(Background.EMPTY);
         borderPane.setCenter(liveMap);
         borderPane.setBottom(tabs.getTabPane());
+
+
+
+
+
+
     }
 
 
 
     public void showUnMatchRequests(){
+
+        if(getUnMatchedRequested().isEmpty()) {
+            FxUtilities.showMassage(getStage(), "there is no unmatch requests", "alert", false);
+            return;
+        }
+
         FXMLLoader loader = new FXMLLoader();
         VBox vBox = null;
 
@@ -315,6 +343,11 @@ public class MainController {
     }
 
     public void showMatches(List<Match> matches,RequestTripProperty requestTripProperty){
+        if(matches.isEmpty()){
+            FxUtilities.showMassage(getStage(),"No results","alert",false);
+            return;
+        }
+
         FXMLLoader loader = new FXMLLoader();
         VBox vBox = null;
 
@@ -356,5 +389,9 @@ public class MainController {
 
     public List<RequestTripProperty> getUnMatchedRequested(){
         return requestTableController.getRequestTripPropertyObservableList().stream().filter(r -> !r.getRequestTrip().isMatch()).collect(Collectors.toList());
+    }
+
+    public void exit(){
+        getStage().close();
     }
 }

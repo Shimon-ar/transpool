@@ -38,7 +38,7 @@ public class Edge extends Group {
       arrowLine = new Arrow();
         arrowLine.startXProperty().bind(Bindings.createDoubleBinding(() -> {
             Bounds b = source.getBoundsInParent();
-            return (b.getMinX() + b.getWidth() / 2) - 40 ;
+            return (b.getMinX() + b.getWidth() / 2) - 50 ;
         }, source.boundsInParentProperty()));
         arrowLine.startYProperty().bind(Bindings.createDoubleBinding(() -> {
             Bounds b = source.getBoundsInParent();
@@ -46,7 +46,7 @@ public class Edge extends Group {
         }, source.boundsInParentProperty()));
         arrowLine.endXProperty().bind(Bindings.createDoubleBinding(() -> {
             Bounds b = target.getBoundsInParent();
-            return (b.getMinX() + b.getWidth() / 2 ) - 40;
+            return (b.getMinX() + b.getWidth() / 2 ) - 50;
         }, target.boundsInParentProperty()));
         arrowLine.endYProperty().bind(Bindings.createDoubleBinding(() -> {
             Bounds b = target.getBoundsInParent();
