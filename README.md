@@ -1,7 +1,7 @@
 # Name:Shimon Arshavsly
 
 Car managment application.
--Build the application with maven
+- Build the application with maven
 - I used the Jfeonix library to get special style to my application.
 - After loading the map - xml file (you have exmples maps in xml files folder) you will see on the center the map and underneath table of all trip requests and offers with the relevant details.
 - By clicking on row of the offer table you will see animation of the specific route of this offer, which you can cancel by clicking on the right pop up on animation on.
